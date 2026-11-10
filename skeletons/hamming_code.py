@@ -1,6 +1,16 @@
 import numpy as np
 import random
 
+# ==========================================
+# 1. Define your valid codewords here:
+# (Hint: Will these specific vectors survive level 2?)
+# ==========================================
+VALID_CODEWORDS = [
+    np.array([0,0,0,0,0,0,0]),
+    np.array([1,1,0,1,0,0,1]),
+    np.array([0,1,1,0,1,1,1]),
+    np.array([1,0,1,1,1,1,0])
+]
 
 def fix_errors(corrupted_vector, valid_codewords):
     fixed_vector = corrupted_vector.copy()
@@ -13,13 +23,7 @@ def fix_errors(corrupted_vector, valid_codewords):
 
 
 def run_simulation():
-    # Note: To successfully correct 2 errors, you might need to add data to the codewords
-    valid_codewords = [
-        np.array([0,0,0,0,0,0,0]),
-        np.array([1,1,0,1,0,0,1]),
-        np.array([0,1,1,0,1,1,1]),
-        np.array([1,0,1,1,1,1,0])
-    ]
+    valid_codewords = VALID_CODEWORDS.copy()    
     
     tests_per_level = 100
     max_errors = 2
