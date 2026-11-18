@@ -1,7 +1,7 @@
 import random
 
 # Change this to 1, 2, or 3 to test different levels
-CURRENT_LEVEL = 3
+CURRENT_LEVEL = 1
 
 # ==============================================================================
 # LEVEL 1: Single CPU Scheduling
