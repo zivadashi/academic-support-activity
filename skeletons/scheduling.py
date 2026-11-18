@@ -1,7 +1,7 @@
 import random
 
 # Change this to 1, 2, or 3 to test different levels
-CURRENT_LEVEL = 1
+CURRENT_LEVEL = 3
 
 # ==============================================================================
 # LEVEL 1: Single CPU Scheduling
@@ -141,7 +141,7 @@ def run_level_1():
     if avg_time <= true_optimal_avg:
         print(f"Incredible! You hit the mathematical optimum of {true_optimal_avg:.2f} ticks.")
     else:
-        print(f"Hint: The optimal average for this workload is {true_optimal_avg:.2f} ticks. Try Shortest Remaining Time First (SRTF)!")
+        print(f"Hint: The optimal average for this workload is {true_optimal_avg:.2f} ticks. Make a better algorithm!")
 
 
 def run_level_2():
@@ -168,6 +168,13 @@ def run_level_2():
                 approved = student_level_2_static(available_resources.copy(), waiting_processes.copy())
             except Exception as e:
                 print(f"[Tick {timestamp}] Algorithm error: {e}")
+                return
+                
+            # STALL DETECTION: If no processes are running, available resources are full. 
+            # If the algorithm still approves nothing, the system is stalled forever.
+            if not active_processes and not approved:
+                print(f"\n[Tick {timestamp}] FATAL: System stalled.")
+                print("No processes are active, and your algorithm approved none. Return a valid process_id to start!")
                 return
                 
             for pid in approved:
@@ -199,6 +206,11 @@ def run_level_2():
             for i in range(3):
                 available_resources[i] += req[i]
             del active_processes[pid]
+            
+        # Fail-safe timeout
+        if timestamp > 5000:
+            print(f"\nSimulation timed out at {timestamp} ticks. Starvation detected.")
+            return
             
     print("Status: PASSED. All processes completed without exceeding bounds.")
     print(f"Score (Total Time): {timestamp} ticks.")
