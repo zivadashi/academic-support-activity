@@ -16,7 +16,6 @@ def find_shortest_path(graph, node_coords, start_node, end_node):
                Example: graph['Ave_5_St_42']['Ave_5_St_43'] = weight
         node_coords: A dictionary mapping node names to their (X, Y) coordinates.
                      Example: node_coords['Ave_5_St_42'] = (5, 42)
-                     Hint: Use these to calculate distances for an A* heuristic!
         start_node: The starting node identifier.
         end_node: The target node identifier.
         
@@ -161,7 +160,7 @@ def run_navigation_simulation():
         if successes == tests:
             print("Status: PASSED.")
             print("Next steps:")
-            print("1. Are you visiting hundreds of nodes? Try implementing A*.")
+            print("1. Are you visiting hundreds of nodes? Try a different algorithm.")
             print("2. Ensure your optimizations don't accidentally increase the 'Route Cost'!")
         else:
             print("Status: FAILED. Review algorithm edge cases.")

@@ -6,7 +6,7 @@ CURRENT_LEVEL = 1
 # ==============================================================================
 # LEVEL 1: Single CPU Scheduling
 # ==============================================================================
-def student_level_1_cpu(processes):
+def level_1_cpu(processes):
     """
     Level 1: You have 1 CPU. Processes only need the CPU and their total 
     run time is known ahead of time. No deadlocks are possible.
@@ -25,14 +25,14 @@ def student_level_1_cpu(processes):
     # write your level 1 code here
     # ==========================================
     
-    # Placeholder: just picks a random process
+    # Placeholder: just picks the first process
     return list(processes.keys())[0] if processes else None
 
 
 # ==============================================================================
 # LEVEL 2: Static Resource Allocation
 # ==============================================================================
-def student_level_2_static(available_resources, waiting_processes):
+def level_2_static(available_resources, waiting_processes):
     """
     Level 2: You have 3 resources (CPU, RAM, Disk). Processes need a combination 
     of them to run. They request everything they need upfront and hold it 
@@ -69,7 +69,7 @@ class OperatingSystem:
         self.max_demand = {}
         self.allocated = {}
 
-def student_level_3_dynamic(os_state, pending_requests):
+def level_3_dynamic(os_state, pending_requests):
     """
     Level 3: Processes start with 0 resources and dynamically request more 
     over time up to their max_demand. If you are not careful, circular 
@@ -88,14 +88,14 @@ def student_level_3_dynamic(os_state, pending_requests):
     approved = []
     
     # ==========================================
-    # write your level 3 Banker's algorithm here
+    # write your level 3 code here
     # ==========================================
     
     return approved
 
 
 # ==============================================================================
-# SIMULATION TESTERS (Pre-implemented)
+# SIMULATION TESTERS
 # ==============================================================================
 
 def run_level_1():
@@ -120,7 +120,7 @@ def run_level_1():
         timestamp += 1
         
         try:
-            pid_to_run = student_level_1_cpu(processes.copy())
+            pid_to_run = level_1_cpu(processes.copy())
         except Exception as e:
             print(f"[Tick {timestamp}] Algorithm error: {e}")
             return
@@ -134,14 +134,14 @@ def run_level_1():
             completion_times[pid_to_run] = timestamp
             del processes[pid_to_run]
             
-    avg_time = sum(completion_times.values()) / len(completion_times)
-    print("Status: PASSED. All processes completed.")
+    total_completion_time = sum(completion_times.values())
+    avg_time = total_completion_time / len(completion_times)
     print(f"Score (Average Completion Time): {avg_time:.2f} ticks.")
     
-    if avg_time <= true_optimal_avg:
-        print(f"Incredible! You hit the mathematical optimum of {true_optimal_avg:.2f} ticks.")
+    if total_completion_time <= optimal_sum:
+        print(f"Status: PASSED. You hit the mathematical optimum of {true_optimal_avg:.2f} ticks!")
     else:
-        print(f"Hint: The optimal average for this workload is {true_optimal_avg:.2f} ticks. Make a better algorithm!")
+        print(f"Status: FAILED. The optimal average for this workload is {true_optimal_avg:.2f} ticks. Make a better algorithm!")
 
 
 def run_level_2():
@@ -165,7 +165,7 @@ def run_level_2():
         
         if waiting_processes:
             try:
-                approved = student_level_2_static(available_resources.copy(), waiting_processes.copy())
+                approved = level_2_static(available_resources.copy(), waiting_processes.copy())
             except Exception as e:
                 print(f"[Tick {timestamp}] Algorithm error: {e}")
                 return
@@ -214,7 +214,6 @@ def run_level_2():
             
     print("Status: PASSED. All processes completed without exceeding bounds.")
     print(f"Score (Total Time): {timestamp} ticks.")
-    print("Hint: Try to implement a greedy Knapsack-like heuristic to pack resources tightly!")
 
 
 def run_level_3():
@@ -266,12 +265,14 @@ def run_level_3():
                     p.current_request = req
                     p.is_blocked = True
                     pending_requests[pid] = req
+                else:
+                    working_processes += 1
             else:
                 working_processes += 1
                 
         if pending_requests:
             try:
-                approved = student_level_3_dynamic(os_state, pending_requests)
+                approved = level_3_dynamic(os_state, pending_requests)
             except Exception as e:
                 print(f"[Tick {timestamp}] Algorithm error: {e}")
                 return
@@ -308,14 +309,15 @@ def run_level_3():
             if p.work_remaining <= 0:
                 for i in range(3):
                     os_state.available_resources[i] += p.allocated[i]
-                    os_state.allocated[pid][i] = 0
+                del os_state.allocated[pid]
+                del os_state.max_demand[pid]
                 completed_processes.add(pid)
 
         if timestamp > 5000:
             print(f"\nSimulation timed out at {timestamp} ticks. Starvation detected.")
             return
 
-    print(f"Status: PASSED. All processes completed successfully.")
+    print("Status: PASSED. All processes completed successfully.")
     print(f"Score (Total Time): {timestamp} ticks.")
     print("Goal: Lower this number by safely approving more concurrent requests without deadlocking!")
 

@@ -8,7 +8,7 @@ CURRENT_LEVEL = 1
 # ==============================================================================
 # LEVEL 1: Minimum Distance Search
 # ==============================================================================
-def student_level_1_distance(corrupted_batch, valid_codewords):
+def level_1_distance(corrupted_batch, valid_codewords):
     """
     Level 1: You are given a small batch of corrupted vectors and a list of 
     all mathematically valid codewords. Each corrupted vector has exactly 1 error.
@@ -34,7 +34,7 @@ def student_level_1_distance(corrupted_batch, valid_codewords):
 # ==============================================================================
 # LEVEL 2: Syndrome Decoding (Linear Algebra)
 # ==============================================================================
-def student_level_2_syndrome(corrupted_batch, H_matrix):
+def level_2_syndrome(corrupted_batch, H_matrix):
     """
     Level 2: The brute-force distance search is too slow for large systems.
     Instead, use the Parity-Check Matrix (H).
@@ -64,7 +64,7 @@ def student_level_2_syndrome(corrupted_batch, H_matrix):
 # ==============================================================================
 # LEVEL 3: The Missing Matrix & Ultimate Optimization
 # ==============================================================================
-def student_level_3_deduction(corrupted_batch, G_matrix):
+def level_3_deduction(corrupted_batch, G_matrix):
     """
     Level 3: In the real world, you only receive the Generator Matrix (G) used 
     to encode the data. You must deduce H mathematically and decode a MASSIVE batch.
@@ -73,8 +73,7 @@ def student_level_3_deduction(corrupted_batch, G_matrix):
     1. G is provided in standard form: G = [I_k | P]
     2. Deduce H using the rule: H = [-P^T | I_{n-k}]. (Note: in modulo 2, -1 = 1).
     3. Fix 100,000 vectors simultaneously. 
-    4. NO PYTHON LOOPS ALLOWED. You must use pure Numpy broadcasting and 
-       matrix multiplication to beat the execution time limit.
+    4. Hint: Pure python would be too slow... numpy is advised.
     
     Args:
         corrupted_batch: A 2D numpy array (100000, 7).
@@ -154,7 +153,7 @@ def run_level_1():
     
     start_time = time.perf_counter()
     try:
-        fixed = student_level_1_distance(corrupted.copy(), valid_codewords)
+        fixed = level_1_distance(corrupted.copy(), valid_codewords)
     except Exception as e:
         print(f"Algorithm error: {e}")
         return
@@ -170,7 +169,7 @@ def run_level_2():
     
     start_time = time.perf_counter()
     try:
-        fixed = student_level_2_syndrome(corrupted.copy(), H_MATRIX.copy())
+        fixed = level_2_syndrome(corrupted.copy(), H_MATRIX.copy())
     except Exception as e:
         print(f"Algorithm error: {e}")
         return
@@ -187,7 +186,7 @@ def run_level_3():
     
     start_time = time.perf_counter()
     try:
-        fixed = student_level_3_deduction(corrupted.copy(), G_MATRIX.copy())
+        fixed = level_3_deduction(corrupted.copy(), G_MATRIX.copy())
     except Exception as e:
         print(f"Algorithm error: {e}")
         return
